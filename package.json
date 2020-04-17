@@ -1,0 +1,13 @@
+{
+  "name": "automate",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@apexearth/copy": "^1.4.5",
+    "kleur": "^3.0.3"
+  },
+  "bin": {
+    "am": "bin.js"
+  }
+}
