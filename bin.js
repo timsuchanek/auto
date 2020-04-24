@@ -4,11 +4,14 @@ const copy = require('@apexearth/copy')
 const { bold } = require('kleur')
 const fs = require('fs')
 const path = require('path')
+const execa = require('execa')
 
 async function main() {
   const projects = fs.readdirSync(path.join(__dirname, 'projects'))
   if (!process.argv[2]) {
-    throw new Error(`Please provide a template with ${bold('am PROJECT_NAME')}.
+    throw new Error(`Please provide a template with ${bold(
+      'auto PROJECT_NAME',
+    )}.
 Available projects: ${bold(projects.join(', '))}`)
   }
 
@@ -27,7 +30,13 @@ ${cwdFiles.join('\n')}`)
   await copy({
     from: projectDir,
     to: process.cwd(),
+    recursive: true,
+  })
+
+  await execa.command('yarn add @prisma/client@alpha @prisma/cli@alpha', {
+    stdio: 'inherit',
+    shell: true,
   })
 }
 
-main().catch((e) => console.error(e))
+main().catch((e) => console.error(e.message))
