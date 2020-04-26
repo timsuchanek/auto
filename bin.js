@@ -15,6 +15,9 @@ const args = arg({
   '--sqlite': String,
 })
 
+const DEFAULT_POSTGRES_URL = 'postgresql://postgres:postgres@localhost:5432/'
+const DEFAULT_MYSQL_URL = 'mysql://root:root@localhost:5432/'
+
 function changeDatabaseType(type, url) {
   const schemaPath = path.join(process.cwd(), 'prisma', 'schema.prisma')
   const envPath = path.join(process.cwd(), 'prisma', '.env')
@@ -66,8 +69,10 @@ ${cwdFiles.join('\n')}`)
 
   switch (command) {
     case 'prisma': {
+      // resolve config from the home directory
       const configPath = path.join(os.homedir(), '.autorc.json')
       const configExists = fs.existsSync(configPath)
+
       let config
       if (configExists) {
         config = fs.readFileSync(configPath)
@@ -79,7 +84,9 @@ ${cwdFiles.join('\n')}`)
           )}`,
         )
       }
-      console.log(config)
+
+      // change files based on the flags provided
+      // POSTGRES
       if (args['--pg']) {
         // deleting the sqlite database
         fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
@@ -92,11 +99,12 @@ ${cwdFiles.join('\n')}`)
           console.log(database)
         } else {
           console.log('Using default pg url')
-          database =
-            'postgresql://postgres:postgres@localhost:5432/' + args['--pg']
+          database = DEFAULT_POSTGRES_URL + args['--pg']
         }
         changeDatabaseType('postgresql', database)
       }
+
+      // MYSQL
       if (args['--mysql']) {
         // deleting the sqlite database
         fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
@@ -108,10 +116,12 @@ ${cwdFiles.join('\n')}`)
           }${args['--mysql']}`
         } else {
           console.log('Using default mysql url')
-          database = 'mysql://root:root@localhost:5432/' + args['--mysql']
+          database = DEFAULT_MYSQL_URL + args['--mysql']
         }
         changeDatabaseType('mysql', database)
       }
+
+      // SQLITE
       if (args['--sqlite']) {
         // deleting the sqlite database
         fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
@@ -119,6 +129,8 @@ ${cwdFiles.join('\n')}`)
         database = 'file:' + args['--sqlite']
         changeDatabaseType('sqlite', database)
       }
+
+      // Print out a message when no arguments are provided
       if (!args['--pg'] && !args['--sqlite'] && !args['--mysql']) {
         console.log(`Falling back to ${bold('sqlite')}`)
       }
