@@ -96,7 +96,6 @@ ${cwdFiles.join('\n')}`)
           database = `${config.prisma.postgres}${
             config.prisma.postgres.endsWith('/') ? '' : '/'
           }${args['--pg']}`
-          console.log(database)
         } else {
           console.log('Using default pg url')
           database = DEFAULT_POSTGRES_URL + args['--pg']
