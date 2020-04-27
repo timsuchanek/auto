@@ -16,7 +16,7 @@ const args = arg({
 })
 
 const DEFAULT_POSTGRES_URL = 'postgresql://postgres:postgres@localhost:5432/'
-const DEFAULT_MYSQL_URL = 'mysql://root:root@localhost:5432/'
+const DEFAULT_MYSQL_URL = 'mysql://root:root@localhost:3306/'
 
 function changeDatabaseType(type, url) {
   const schemaPath = path.join(process.cwd(), 'prisma', 'schema.prisma')
