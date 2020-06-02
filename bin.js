@@ -77,12 +77,6 @@ ${cwdFiles.join('\n')}`)
       if (configExists) {
         config = fs.readFileSync(configPath)
         config = JSON.parse(config)
-      } else {
-        console.log(
-          `No config found, I will fallback to defaults. I looked for config at ${bold(
-            configPath,
-          )}`,
-        )
       }
 
       // change files based on the flags provided
@@ -127,11 +121,6 @@ ${cwdFiles.join('\n')}`)
         console.log('Using default sqlite url')
         database = 'file:' + args['--sqlite']
         changeDatabaseType('sqlite', database)
-      }
-
-      // Print out a message when no arguments are provided
-      if (!args['--pg'] && !args['--sqlite'] && !args['--mysql']) {
-        console.log(`Falling back to ${bold('sqlite')}`)
       }
 
       await execa.command('yarn add @prisma/client@alpha @prisma/cli@alpha', {
