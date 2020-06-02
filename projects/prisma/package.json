@@ -13,6 +13,7 @@
     "typescript": "^3.8.3"
   },
   "scripts": {
-    "start": "ts-node main.ts"
+    "start": "ts-node main.ts",
+    "generate": "prisma generate"
   }
 }
