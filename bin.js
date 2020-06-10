@@ -118,12 +118,11 @@ ${cwdFiles.join('\n')}`)
       if (args['--sqlite']) {
         // deleting the sqlite database
         fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
-        console.log('Using default sqlite url')
         database = 'file:' + args['--sqlite']
         changeDatabaseType('sqlite', database)
       }
 
-      await execa.command('yarn add @prisma/client@alpha @prisma/cli@alpha', {
+      await execa.command('yarn add @prisma/client@dev @prisma/cli@dev', {
         stdio: 'inherit',
         shell: true,
       })
