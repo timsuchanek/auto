@@ -132,11 +132,7 @@ ${cwdFiles.join('\n')}`)
       await prismaCommand(args)
     }
     case 'apollo': {
-      await prismaCommand(args)
-      await execa.command('npx prisma generate', {
-        stdio: 'inherit',
-        shell: true,
-      })
+      await prismaCommand(args) 
     }
   }
 }

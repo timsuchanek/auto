@@ -8,16 +8,11 @@ export const rawSchema = makeSchema({
   types: [types],
   plugins: [nexusPrismaPlugin()],
   typegenAutoConfig: {
-    // contextType: 'Context.Context',
     sources: [
       {
         source: '@prisma/client',
         alias: 'prismaClient',
       },
-      // {
-      //   source: require.resolve('../context'),
-      //   alias: 'Context',
-      // },
     ],
   },
   outputs: {
