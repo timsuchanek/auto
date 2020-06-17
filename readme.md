@@ -13,6 +13,34 @@ This is not an official Prisma tool!
 
 ## Usage
 
+### Default usage (SQLite)
+
+```bash
+mkdir test
+cd test
+npx @timsuchanek/auto prisma
+ts-node main.ts
+```
+
+### Postgres
+
+```bash
+mkdir test
+cd test
+npx @timsuchanek/auto prisma --pg DATABASE_NAME
+ts-node main.ts
+```
+
+### MySQL
+
+```bash
+mkdir test
+cd test
+npx @timsuchanek/auto prisma --mysql DATABASE_NAME
+ts-node main.ts
+```
+
+### Default url
 If you want to set the default url use, add the following config file to `~/.autorc.json`
 
 ```json
@@ -22,31 +50,4 @@ If you want to set the default url use, add the following config file to `~/.aut
     "mysql": "mysql://root:root@localhost:3306/"
   }
 }
-```
-
-Use default(spins up a sqlite project)
-
-```bash
-mkdir test
-cd test
-npx @timsuchanek/auto prisma
-ts-node main.ts
-```
-
-Postgres
-
-```bash
-mkdir test
-cd test
-npx @timsuchanek/auto prisma --pg DATABASE_NAME
-ts-node main.ts
-```
-
-MySQL
-
-```bash
-mkdir test
-cd test
-npx @timsuchanek/auto prisma --mysql DATABASE_NAME
-ts-node main.ts
 ```
