@@ -1,11 +1,11 @@
 import { PrismaClient } from '@prisma/client'
 
 async function main() {
-  const client = new PrismaClient()
+  const prisma = new PrismaClient()
 
-  const data = await client.user.findMany()
+  const data = await prisma.user.findMany()
   console.log(data)
-  client.disconnect()
+  prisma.$disconnect()
 }
 
 main()
