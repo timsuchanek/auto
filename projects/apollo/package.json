@@ -1,0 +1,23 @@
+{
+  "name": "prisma-sqlite",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "dependencies": {
+    "@nexus/schema": "^0.14.0",
+    "@prisma/cli": "^2.1.0-dev.16",
+    "@prisma/client": "^2.1.0-dev.16",
+    "apollo-server": "^2.14.3",
+    "dotenv": "^8.2.0",
+    "nexus-prisma": "^0.14.0"
+  },
+  "devDependencies": {
+    "@types/node": "^13.11.1",
+    "ts-node": "^8.8.2",
+    "typescript": "^3.8.3"
+  },
+  "scripts": {
+    "start": "ts-node src/index.ts",
+    "generate": "prisma generate"
+  }
+}

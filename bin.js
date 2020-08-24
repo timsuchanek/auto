@@ -38,6 +38,66 @@ function changeDatabaseType(type, url) {
   fs.writeFileSync(envPath, newEnv)
 }
 
+async function prismaCommand(args) {
+  // resolve config from the home directory
+  const configPath = path.join(os.homedir(), '.autorc.json')
+  const configExists = fs.existsSync(configPath)
+
+  let config
+  if (configExists) {
+    config = fs.readFileSync(configPath)
+    config = JSON.parse(config)
+  }
+
+  // change files based on the flags provided
+  // POSTGRES
+  if (args['--pg']) {
+    // deleting the sqlite database
+    fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
+    // add the database name
+    let database
+    if (config && config.prisma && config.prisma.postgres) {
+      database = `${config.prisma.postgres}${
+        config.prisma.postgres.endsWith('/') ? '' : '/'
+      }${args['--pg']}`
+    } else {
+      console.log('Using default pg url')
+      database = DEFAULT_POSTGRES_URL + args['--pg']
+    }
+    changeDatabaseType('postgresql', database)
+  }
+
+  // MYSQL
+  if (args['--mysql']) {
+    // deleting the sqlite database
+    fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
+    // add the database name
+    let database
+    if (config && config.prisma && config.prisma.mysql) {
+      database = `${config.prisma.mysql}${
+        config.prisma.mysql.endsWith('/') ? '' : '/'
+      }${args['--mysql']}`
+    } else {
+      console.log('Using default mysql url')
+      database = DEFAULT_MYSQL_URL + args['--mysql']
+    }
+    changeDatabaseType('mysql', database)
+  }
+
+  // SQLITE
+  if (args['--sqlite']) {
+    // deleting the sqlite database
+    fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
+    database = 'file:' + args['--sqlite']
+    changeDatabaseType('sqlite', database)
+  }
+
+  await execa.command('yarn add @prisma/client@dev @prisma/cli@dev', {
+    stdio: 'inherit',
+    shell: true,
+  })
+}
+
 async function main() {
   const projects = fs.readdirSync(path.join(__dirname, 'projects'))
   const command = args._[0]
@@ -69,63 +129,10 @@ ${cwdFiles.join('\n')}`)
 
   switch (command) {
     case 'prisma': {
-      // resolve config from the home directory
-      const configPath = path.join(os.homedir(), '.autorc.json')
-      const configExists = fs.existsSync(configPath)
-
-      let config
-      if (configExists) {
-        config = fs.readFileSync(configPath)
-        config = JSON.parse(config)
-      }
-
-      // change files based on the flags provided
-      // POSTGRES
-      if (args['--pg']) {
-        // deleting the sqlite database
-        fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
-        // add the database name
-        let database
-        if (config && config.prisma && config.prisma.postgres) {
-          database = `${config.prisma.postgres}${
-            config.prisma.postgres.endsWith('/') ? '' : '/'
-          }${args['--pg']}`
-        } else {
-          console.log('Using default pg url')
-          database = DEFAULT_POSTGRES_URL + args['--pg']
-        }
-        changeDatabaseType('postgresql', database)
-      }
-
-      // MYSQL
-      if (args['--mysql']) {
-        // deleting the sqlite database
-        fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
-        // add the database name
-        let database
-        if (config && config.prisma && config.prisma.mysql) {
-          database = `${config.prisma.mysql}${
-            config.prisma.mysql.endsWith('/') ? '' : '/'
-          }${args['--mysql']}`
-        } else {
-          console.log('Using default mysql url')
-          database = DEFAULT_MYSQL_URL + args['--mysql']
-        }
-        changeDatabaseType('mysql', database)
-      }
-
-      // SQLITE
-      if (args['--sqlite']) {
-        // deleting the sqlite database
-        fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
-        database = 'file:' + args['--sqlite']
-        changeDatabaseType('sqlite', database)
-      }
-
-      await execa.command('yarn add @prisma/client@dev @prisma/cli@dev', {
-        stdio: 'inherit',
-        shell: true,
-      })
+      await prismaCommand(args)
+    }
+    case 'apollo': {
+      await prismaCommand(args) 
     }
   }
 }
