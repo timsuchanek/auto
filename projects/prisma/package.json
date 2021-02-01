@@ -4,13 +4,13 @@
   "main": "index.js",
   "license": "MIT",
   "dependencies": {
-    "@prisma/cli": "^2.0.0-alpha.1102",
-    "@prisma/client": "^2.0.0-alpha.1102"
+    "prisma": "dev",
+    "@prisma/client": "dev"
   },
   "devDependencies": {
-    "@types/node": "^13.11.1",
-    "ts-node": "^8.8.2",
-    "typescript": "^3.8.3"
+    "@types/node": "^14.14.22",
+    "ts-node": "^9.1.1",
+    "typescript": "^4.1.3"
   },
   "scripts": {
     "start": "ts-node main.ts",
