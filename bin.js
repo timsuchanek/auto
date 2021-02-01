@@ -122,7 +122,7 @@ ${cwdFiles.join('\n')}`)
         changeDatabaseType('sqlite', database)
       }
 
-      await execa.command('yarn add @prisma/client@dev @prisma/cli@dev', {
+      await execa.command('yarn add prisma@dev @prisma/cli@dev', {
         stdio: 'inherit',
         shell: true,
       })
