@@ -103,7 +103,9 @@ ${cwdFiles.join('\n')}`)
         fs.unlinkSync(path.join(process.cwd(), 'prisma', 'dev.db'))
         // add the database name
         let database
-        if (config && config.prisma && config.prisma.mysql) {
+        if (args['--mysql'].startsWith('mysql://')) {
+          database = args['--mysql']
+        } else if (config && config.prisma && config.prisma.mysql) {
           database = `${config.prisma.mysql}${
             config.prisma.mysql.endsWith('/') ? '' : '/'
           }${args['--mysql']}`
@@ -122,7 +124,7 @@ ${cwdFiles.join('\n')}`)
         changeDatabaseType('sqlite', database)
       }
 
-      await execa.command('yarn add prisma@dev @prisma/cli@dev', {
+      await execa.command('yarn add prisma@dev @prisma/client@dev', {
         stdio: 'inherit',
         shell: true,
       })
